@@ -790,53 +790,6 @@ def fenxi_1():
         writer.writerow([i, time_equal_flag, time_hou_bigger_qian_flag, time_equal_max, time_equal_num, time_hou_bigger_qian_max, time_hou_bigger_qian_num])
 
 
-'''
-并非特征！不用运行
-函数说明：对上面产生的两个结果 分析下数据情况，然后发送给大熊老师！
-'''
-def fenxi_1_add():
-
-    tongji = pd.read_csv('../data/train_feature/tongji.csv')
-    # >>> len(tongji[tongji['time_equal_flag'] == 1])
-    # 463
-    # >>> len(tongji[tongji['time_hou_bigger_qian_flag'] == 1])
-    # 12
-    # >>> tongji['time_equal_max'].max()
-    # 9
-    # >>> tongji['time_equal_num'].max()
-    # 147
-    # >>> tongji['time_hou_bigger_qian_max'].max()
-    # 64
-    # >>> tongji['time_hou_bigger_qian_num'].max()
-    # 1
-
-    # 3000条训练集样本中，有463条样本存在有 连续相等的t的轨迹点；这463条样本中，最多的一个样本中有9个点连续相等；
-    # 这463条样本中，最多的一个样本中有147组t相等的点（一组中至少含有2个点）
-    # 3000条训练集样本中，有12条样本存在后面点的时间 小于 前面点的时间；这12条样本中，最多的一个样本中有64个连续点小于前面的1个点；
-    # 这12条样本中，每一条样本都只含有一次后面点的时间 小于 前面点的时间 这种情况
-
-    # 接下来检查下 那463条样本中，有多少label为1 多少0
-    a = tongji[tongji['time_equal_flag'] == 1]
-    a = DataFrame(a['id'])
-    a = a.reset_index(drop=True)
-    train = pd.read_csv('../data/train.txt', header=None, sep=' ')
-    train.columns = ['id', 'guiji', 'target', 'label']
-    train = train[['id', 'label']]
-    train = pd.merge(a, train, on='id', how='left')
-
-    print(len(train[train['label'] == 1])) # 463，刚好还都是 正样本
-
-    a = tongji[tongji['time_hou_bigger_qian_flag'] == 1]
-    a = DataFrame(a['id'])
-    a = a.reset_index(drop=True)
-    train = pd.read_csv('../data/train.txt', header=None, sep=' ')
-    train.columns = ['id', 'guiji', 'target', 'label']
-    train = train[['id', 'label']]
-    train = pd.merge(a, train, on='id', how='left')
-
-    print(len(train[train['label'] == 1])) # 12，刚好还也都是 正样本
-
-
 if __name__ == "__main__":
     make_train()
     a1()
